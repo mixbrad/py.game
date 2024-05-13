@@ -9,6 +9,7 @@ fps=60
 fonte= pygame.font.Font("freesansbold.ttf", 30)
 clock= pygame.time.Clock()
 active= False
+pontuacao= 0
 
 #definição das cores
 branco=(255,255,255)
@@ -33,12 +34,12 @@ def desenhar_tabuleiro(tabuleiro):
     tabuleiro_alvos=[]
     for i in range(len(tabuleiro)):
         for j in range(len(tabuleiro[i])):
-            if tabuleiro[i][j]>0:
+            if tabuleiro[i][j]>0: 
                 alvos= pygame.draw.rect(tela, cores[(tabuleiro[i][j])-1], [j*100, i*40, 98, 38])
                 limite_alto= pygame.rect.Rect((j*100, i*40), (98, 1))
-                limite_baixo= pygame.rect.Rect((j*100, i*40)+37), (98, 1)
+                limite_baixo= pygame.rect.Rect((j*100, (i*40)+37), (98, 1))
                 esquerda= pygame.rect.Rect((j*100, i*40), (37, 1))
-                direita= pygame.rect.Rect((j*100)+97 , i*40), (37, 1)
+                direita= pygame.rect.Rect(((j*100)+97 , i*40), (37, 1)) 
                 tabuleiro_alvos.append([limite_alto, limite_baixo, esquerda, direita, (i, j)])
     return tabuleiro_alvos
 
@@ -69,6 +70,7 @@ while run:
                 active= True 
                 movimento_bola_y= -1
                 movimento_bola_x= random.choice ([-1, 1])
+                pontuacao= 0
             if event.key == pygame.K_RIGHT and active:
                 movimento_jogador= 1
             if event.key == pygame.K_LEFT and active:
@@ -86,22 +88,52 @@ while run:
     for i in range(len(alvos)):
         if bola.colliderect(alvos[i][0]) or bola.colliderect(alvos[i][1]):
             movimento_bola_y*= -1
-            tabuleiro[alvos[i][1][0]][alvos[i][1][1]]-= 1
-        if bola.colliderect(alvos[i][2]) or bola.colliderect(alvos[i][1]):
-            movimento_bola_x*= -1
-            tabuleiro[alvos[i][1][0]][alvos[i][1][1]]-= 1
+            tabuleiro[alvos[i][4][0]][alvos[i][4][1]]-= 1
+            pontuacao+=1
+        if bola.colliderect(alvos[i][2]) or bola.colliderect(alvos[i][3]):
+            movimento_bola_x *= -1
+            tabuleiro[alvos[i][4][0]][alvos[i][4][1]]-= 1
+            pontuacao+=1
 
     #delimitação para a bola não passar pelo jogador
     if bola.colliderect(jogador):
+        if movimento_jogador== movimento_bola_x:
+            velocidade_bola_x+=1
+        elif movimento_jogador == -movimento_bola_x and velocidade_bola_x > 1:
+            velocidade_bola_x -=1
+        elif movimento_jogador == -movimento_bola_x and velocidade_bola_x == 1:
+            movimento_bola_x *=1
+
         movimento_bola_y*= -1
 
     #movimento da bola
     bola_y+= movimento_bola_y* velocidade_bola_y
     bola_x+= movimento_bola_x* velocidade_bola_x
+    if bola_y >= altura -10:
+        active= False
+        jogador_x= 190
+        bola_x= largura/2
+        bola_y= altura-30
+        movimento_bola_x= 0
+        movimento_bola_y= 0
+        velocidade_bola_x= 5
+        velocidade_bola_y= 5
+        velocidade_jogador= 10
+        movimento_jogador= 0
+        tabuleiro= [[7,7,7,7,7],[6,6,6,6,6],[5,5,5,5,5],[4,4,4,4,4],[3,3,3,3,3],[2,2,2,2,2],[1,1,1,1,1]]
+
+    
+    
     #movimento do jogador
     jogador_x+=movimento_jogador* velocidade_jogador
-        
+    
+   
+    pontuacao_texto= fonte.render(f'Pontuação: {pontuacao}', True, branco)
+    tela.blit(pontuacao_texto, (10, 5))
 
+    if not active:
+        texto_incio= fonte.render("Pressione ESPACO para iniciar", True, branco)
+        tela.blit(texto_incio, (25, 400))
     
     pygame.display.flip()
 pygame.quit()
