@@ -1,0 +1,342 @@
+# ----- Importa e inicia pacotes
+import pygame
+import random
+
+#definição de variaveis pro jogo
+pygame.init()
+relogio= pygame.time.Clock()
+fps=60
+fonte= pygame.font.Font("freesansbold.ttf", 30)
+clock= pygame.time.Clock()
+activen1= False
+activen2= False
+activen3= False
+pontuacao= 0
+
+#definição das cores
+branco=(255,255,255)
+preto=(0,0,0)
+cinza=(128,128,128) 
+vermelho=(255,0,0)
+laranja=(255,128,0)
+verde=(0,255,0)
+azul=(0,0,255)
+roxo=(138,43,226)
+amarelo=(255,255,0)
+rosa=(255,105,180)
+ciano=(0,255,255)
+coresn1=[vermelho, laranja, amarelo, verde]
+coresn2=[vermelho, laranja, amarelo, verde, azul, roxo]
+coresn3=[vermelho, laranja, amarelo, verde, azul, roxo, rosa, ciano ]
+
+def criar_tabuleiro_aleatorion1():
+    tabuleiro_aleatorion1= []
+    linhasn1= random.randint(4)
+    for i in range(linhasn1):
+        linhan1= []
+        for j in range(8):
+            linhan1.append(random.randint(1, 7))
+        tabuleiro_aleatorion1.append(linhan1)
+    return tabuleiro_aleatorion1
+
+def criar_tabuleiro_aleatorion2():
+    tabuleiro_aleatorion2= []
+    linhasn2= random.randint(6)
+    for i in range(linhasn2):
+        linhan2= []
+        for j in range(8):
+            linhan2.append(random.randint(1, 7))
+        tabuleiro_aleatorion2.append(linhan2)
+    return tabuleiro_aleatorion2
+
+def criar_tabuleiro_aleatorion3():
+    tabuleiro_aleatorion3= []
+    linhasn3= random.randint(8)
+    for i in range(linhasn3):
+        linhan3= []
+        for j in range(8):
+            linhan3.append(random.randint(1, 7))
+        tabuleiro_aleatorion3.append(linhan3)
+    return tabuleiro_aleatorion3
+
+#definição da tela e da fonte
+altura= 770
+largura= 500
+tela= pygame.display.set_mode((largura, altura))
+#tabuleiro= [[7,7,7,7,7],[6,6,6,6,6],[5,5,5,5,5],[4,4,4,4,4],[3,3,3,3,3],[2,2,2,2,2],[1,1,1,1,1]]
+tabuleiron1=[ ]
+tabuleiron2=[ ]
+tabuleiron3=[ ]
+criar_novon1= True
+criar_novon2= True
+criar_novon3= True
+def desenhar_tabuleiron1(tabuleiron1):
+    tabuleiro_alvosn1=[]
+    for i in range(len(tabuleiron1)):
+        for j in range(len(tabuleiron1[i])):
+            if tabuleiron1[i][j]>0: 
+                alvosn1= pygame.draw.rect(tela, coresn1[(tabuleiron1[i][j])-1], [j*100, i*40, 98, 38], 0, 3)
+                pygame.draw.rect(tela, preto, [j*100, i*40, 98, 38], 3, 3)
+                limite_alton1= pygame.rect.Rect((j*100, i*40), (98, 1))
+                limite_baixon1= pygame.rect.Rect((j*100, (i*40)+37), (98, 1))
+                esquerdan1= pygame.rect.Rect((j*100, i*40), (37, 1))
+                direitan1= pygame.rect.Rect(((j*100)+97 , i*40), (37, 1)) 
+                tabuleiro_alvosn1.append([limite_alton1, limite_baixon1, esquerdan1, direitan1, (i, j)])
+    return tabuleiro_alvosn1
+
+def desenhar_tabuleiron2(tabuleiron2):
+    tabuleiro_alvosn2=[]
+    for i in range(len(tabuleiron2)):
+        for j in range(len(tabuleiron2[i])):
+            if tabuleiron2[i][j]>0: 
+                alvosn2= pygame.draw.rect(tela, coresn2[(tabuleiron2[i][j])-1], [j*100, i*40, 98, 38], 0, 3)
+                pygame.draw.rect(tela, preto, [j*100, i*40, 98, 38], 3, 3)
+                limite_alton2= pygame.rect.Rect((j*100, i*40), (98, 1))
+                limite_baixon2= pygame.rect.Rect((j*100, (i*40)+37), (98, 1))
+                esquerdan2= pygame.rect.Rect((j*100, i*40), (37, 1))
+                direitan2= pygame.rect.Rect(((j*100)+97 , i*40), (37, 1)) 
+                tabuleiro_alvosn2.append([limite_alton2, limite_baixon2, esquerdan2, direitan2, (i, j)])
+    return tabuleiro_alvosn2
+
+def desenhar_tabuleiron3(tabuleiron3):
+    tabuleiro_alvosn3=[]
+    for i in range(len(tabuleiron3)):
+        for j in range(len(tabuleiron3[i])):
+            if tabuleiron3[i][j]>0: 
+                alvosn3= pygame.draw.rect(tela, coresn3[(tabuleiron3[i][j])-1], [j*100, i*40, 98, 38], 0, 3)
+                pygame.draw.rect(tela, preto, [j*100, i*40, 98, 38], 3, 3)
+                limite_alton3= pygame.rect.Rect((j*100, i*40), (98, 1))
+                limite_baixon3= pygame.rect.Rect((j*100, (i*40)+37), (98, 1))
+                esquerdan3= pygame.rect.Rect((j*100, i*40), (37, 1))
+                direitan3= pygame.rect.Rect(((j*100)+97 , i*40), (37, 1)) 
+                tabuleiro_alvosn3.append([limite_alton3, limite_baixon3, esquerdan3, direitan3, (i, j)])
+    return tabuleiro_alvosn3
+
+
+
+#definicão das variáveis do jogador e da bola nivel 1
+jogador_x= 190
+bola_x= largura/2
+bola_y= altura-30
+movimento_bola_xn1= 0
+movimento_bola_yn1= 0
+velocidade_bola_xn1= 5
+velocidade_bola_yn1= 5
+velocidade_jogadon1r= 10
+movimento_jogadorn1= 0
+
+
+#definicão das variáveis do jogador e da bola nivel 2
+jogador_x= 190
+bola_x= largura/2
+bola_y= altura-30
+movimento_bola_xn2= 0
+movimento_bola_yn2= 0
+velocidade_bola_xn2= 7
+velocidade_bola_yn2= 7
+velocidade_jogadon2= 15
+movimento_jogadorn2= 0
+
+
+#definicão das variáveis do jogador e da bola nivel 3
+jogador_x= 190
+bola_x= largura/2
+bola_y= altura-30
+movimento_bola_xn3= 0
+movimento_bola_yn3= 0
+velocidade_bola_xn3= 10
+velocidade_bola_yn3= 10
+velocidade_jogadon3= 20
+movimento_jogadorn3= 0
+
+
+runn1= True
+while runn1:
+    tela.fill(cinza)
+    relogio.tick(fps)
+    if criar_novon1:
+        tabuleiron1= criar_tabuleiro_aleatorion1()
+        criar_novon1= False
+    alvosn1= desenhar_tabuleiron1(tabuleiron1)
+    jogador= pygame.draw.rect(tela, preto, [jogador_x, altura-20, 120, 15], 0, 3)
+    pygame.draw.rect(tela, branco, [jogador_x +5, altura-18, 110, 11], 3, 3)
+    bola= pygame.draw.circle(tela, branco, (bola_x, bola_y), 10)
+    pygame.draw.circle(tela, preto, (bola_x, bola_y), 10, 3)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            runn1= False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not activen1:
+                activen1= True 
+                movimento_bola_yn1= -1
+                movimento_bola_xn1= random.choice ([-1, 1])
+                pontuacao= 0
+            if event.key == pygame.K_RIGHT and activen1:
+                movimento_jogadorn1= 1
+            if event.key == pygame.K_LEFT and activen1:
+                movimento_jogadorn1= -1
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT:
+                movimento_jogadorn1= 0
+            if event.key == pygame.K_LEFT:
+                movimento_jogadorn1= 0
+
+    
+    #delimitação para a bola não sair do tabuleiro
+    if bola_x <= 10 or bola_x >= largura-10:
+        movimento_bola_xn1*= -1
+
+    for i in range(len(alvosn1)):
+        if bola.colliderect(alvosn1[i][0]) or bola.colliderect(alvosn1[i][1]):
+            movimento_bola_yn1*= -1
+            tabuleiron1[alvosn1[i][4][0]][alvosn1[i][4][1]]-= 1
+            pontuacao+=1
+        if (bola.colliderect(alvosn1[i][2]) and movimento_bola_xn1 == 1) or (bola.colliderect(alvosn1[i][3])  and movimento_bola_xn1 == -1):
+            movimento_bola_xn1 *= -1
+            tabuleiron1[alvosn1[i][4][0]][alvosn1[i][4][1]]-= 1
+            pontuacao+=1
+
+    #delimitação para a bola não passar pelo jogador
+    if bola.colliderect(jogador):
+        if movimento_jogadorn1== movimento_bola_xn1:
+            velocidade_bola_xn1 +=1
+        elif movimento_jogadorn1 == -movimento_bola_xn1 and velocidade_bola_xn1 > 1:
+            velocidade_bola_xn1 -=1
+        elif movimento_jogadorn1 == -movimento_bola_xn1 and velocidade_bola_xn1 == 1:
+            movimento_bola_xn1 *=1
+        movimento_bola_yn1 *= -1
+
+    #movimento da bola
+    bola_y+= movimento_bola_yn1* velocidade_bola_yn1
+    bola_x+= movimento_bola_xn1* velocidade_bola_xn1
+
+    if bola_y <= 10:
+        movimento_bola_y= 10
+        movimento_bola_y*= -1
+
+    if bola_y >= altura -10 or len(alvosn1)== 0:
+        active= False
+        jogador_x= 190
+        bola_x= largura/2
+        bola_y= altura-30
+        movimento_bola_xn1= 0
+        movimento_bola_yn1= 0
+        velocidade_bola_xn1= 5
+        velocidade_bola_yn1= 5
+        velocidade_jogadorn1= 10
+        movimento_jogadorn1= 0
+        criar_novon1= True
+    
+    #movimento do jogador sem sair da tela
+    jogador_x+=movimento_jogadorn1* velocidade_jogadorn1
+    if jogador_x <= 0:
+        jogador_x= 0
+    if jogador_x >= largura-120:
+        jogador_x= largura-120
+    
+   
+    pontuacao_texto= fonte.render(f'Pontuação: {pontuacao}', True, branco)
+    tela.blit(pontuacao_texto, (12, 7))
+
+    if not active:
+        texto_incio= fonte.render("Pressione ESPACO para iniciar", True, branco)
+        tela.blit(texto_incio, (25, 400))
+    
+    pygame.display.flip()
+pygame.quit()
+
+
+runn2= True
+while runn2:
+    tela.fill(cinza)
+    relogio.tick(fps)
+    if criar_novon2:
+        tabuleiron2= criar_tabuleiro_aleatorion2()
+        criar_novon2= False
+    alvosn2= desenhar_tabuleiron2(tabuleiron2)
+    jogador= pygame.draw.rect(tela, preto, [jogador_x, altura-20, 120, 15], 0, 3)
+    pygame.draw.rect(tela, branco, [jogador_x +5, altura-18, 110, 11], 3, 3)
+    bola= pygame.draw.circle(tela, branco, (bola_x, bola_y), 10)
+    pygame.draw.circle(tela, preto, (bola_x, bola_y), 10, 3)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            runn2= False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not activen2:
+                activen2= True 
+                movimento_bola_yn2= -2
+                movimento_bola_xn2= random.choice ([-2, 2])
+                pontuacao= pontuacao
+            if event.key == pygame.K_RIGHT and activen1:
+                movimento_jogadorn2= 2
+            if event.key == pygame.K_LEFT and activen1:
+                movimento_jogadorn2= -2
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT:
+                movimento_jogadorn2= 0
+            if event.key == pygame.K_LEFT:
+                movimento_jogadorn2= 0
+
+    
+    #delimitação para a bola não sair do tabuleiro
+    if bola_x <= 10 or bola_x >= largura-10:
+        movimento_bola_xn2*= -1
+
+    for i in range(len(alvosn2)):
+        if bola.colliderect(alvosn2[i][0]) or bola.colliderect(alvosn2[i][1]):
+            movimento_bola_yn2*= -1
+            tabuleiron2[alvosn2[i][4][0]][alvosn2[i][4][1]]-= 1
+            pontuacao+=1
+        if (bola.colliderect(alvosn2[i][2]) and movimento_bola_xn2 >= 1) or (bola.colliderect(alvosn2[i][3])  and movimento_bola_xn2 == -1):
+            movimento_bola_xn2 *= -1
+            tabuleiron1[alvosn1[i][4][0]][alvosn1[i][4][1]]-= 1
+            pontuacao+=1
+
+    #delimitação para a bola não passar pelo jogador
+    if bola.colliderect(jogador):
+        if movimento_jogadorn1== movimento_bola_xn1:
+            velocidade_bola_xn1 +=1
+        elif movimento_jogadorn1 == -movimento_bola_xn1 and velocidade_bola_xn1 > 1:
+            velocidade_bola_xn1 -=1
+        elif movimento_jogadorn1 == -movimento_bola_xn1 and velocidade_bola_xn1 == 1:
+            movimento_bola_xn1 *=1
+        movimento_bola_yn1 *= -1
+
+    #movimento da bola
+    bola_y+= movimento_bola_yn1* velocidade_bola_yn1
+    bola_x+= movimento_bola_xn1* velocidade_bola_xn1
+
+    if bola_y <= 10:
+        movimento_bola_y= 10
+        movimento_bola_y*= -1
+
+    if bola_y >= altura -10 or len(alvosn1)== 0:
+        active= False
+        jogador_x= 190
+        bola_x= largura/2
+        bola_y= altura-30
+        movimento_bola_xn1= 0
+        movimento_bola_yn1= 0
+        velocidade_bola_xn1= 5
+        velocidade_bola_yn1= 5
+        velocidade_jogadorn1= 10
+        movimento_jogadorn1= 0
+        criar_novon1= True
+    
+    #movimento do jogador sem sair da tela
+    jogador_x+=movimento_jogadorn1* velocidade_jogadorn1
+    if jogador_x <= 0:
+        jogador_x= 0
+    if jogador_x >= largura-120:
+        jogador_x= largura-120
+    
+   
+    pontuacao_texto= fonte.render(f'Pontuação: {pontuacao}', True, branco)
+    tela.blit(pontuacao_texto, (12, 7))
+
+    if not active:
+        texto_incio= fonte.render("Pressione ESPACO para iniciar", True, branco)
+        tela.blit(texto_incio, (25, 400))
+    
+    pygame.display.flip()
+pygame.quit()
