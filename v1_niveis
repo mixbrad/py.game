@@ -1,4 +1,4 @@
-# ----- Importa e inicia pacotes
+# ----- Importa e inicia pacotes 
 import pygame
 import random
 
@@ -278,7 +278,7 @@ while runn2:
                 movimento_jogadorn2= 0
 
     
-    #delimitação para a bola não sair do tabuleiro
+    #delimitação para a bola não sair do tabuleiro n1
     if bola_x <= 10 or bola_x >= largura-10:
         movimento_bola_xn2*= -1
 
@@ -292,7 +292,7 @@ while runn2:
             tabuleiron1[alvosn1[i][4][0]][alvosn1[i][4][1]]-= 1
             pontuacao+=1
 
-    #delimitação para a bola não passar pelo jogador
+    #delimitação para a bola não passar pelo jogador n1
     if bola.colliderect(jogador):
         if movimento_jogadorn1== movimento_bola_xn1:
             velocidade_bola_xn1 +=1
