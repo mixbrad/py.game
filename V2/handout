@@ -1,0 +1,51 @@
+# ===== Inicialização =====
+# ----- Importa e inicia pacotes
+import pygame
+
+pygame.init()
+
+# ----- Gera tela principal
+altura=770
+largura= 600
+window = pygame.display.set_mode((largura, altura))
+pygame.display.set_caption('Jogo do tijolinho')
+
+# ----- Inicia estruturas de dados
+game = True
+
+# ----- Inicia assets
+font = pygame.font.SysFont(None, 48)
+text = font.render('Pressione ESPACO para jogar', True, (255, 255, 255))
+
+
+#importa os sprites de cada quadrado
+vermelho= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/vermelho.jpg")
+laranja= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/laranja.jpg")
+amarelo= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/amarelo.jpg")
+verde= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/verde.jpg")
+azul_claro= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/azul.claro.jpg")
+azul_escuro= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/azul.escuro.jpg")
+roxo= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/roxo.jpg")
+rosa= pygame.image.load("C:/Users/diogo/INSPER/1º Semestre/DESIGN DE SOFTWARE 1B 20241/Pygame/py.game/V2/imagens/rosa.jpg")
+
+
+# ===== Loop principal =====
+while game:
+    # ----- Trata eventos
+    for event in pygame.event.get():
+        # ----- Verifica consequências
+        if event.type == pygame.QUIT:
+            game = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                game = False
+
+    # ----- Gera saídas
+    window.fill((255, 255, 255))  # Preenche com a cor branca
+
+    # ----- Atualiza estado do jogo
+    pygame.display.update()  # Mostra o novo frame para o jogador
+
+# ===== Finalização =====
+pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
+
